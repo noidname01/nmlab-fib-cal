@@ -50,4 +50,8 @@ $ curl -X POST --form-string order=10 http://localhost:8000/rest/fibonacci
 $ curl -X GET http://localhost:8000/rest/logs
 ```
 
-## Note
+## Demo
+This is the demo video including setting up the environment and how to use rest api.
+
+https://user-images.githubusercontent.com/55401762/144086852-809165b7-e39e-4a2c-b3ce-67de5468acff.mp4
+
