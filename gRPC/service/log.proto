@@ -1,0 +1,10 @@
+syntax = "proto3";
+service Logs {
+    rpc Log(LogsRequest) returns (LogsResponse);
+}
+
+message LogsRequest {}
+
+message LogsResponse {
+    repeated int64 history = 1;
+}
