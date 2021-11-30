@@ -33,6 +33,7 @@ class FibView(APIView):
     def post(self, request):
         host = f"{config['IP']}:{config['GRPC_PORT']}"
         order = request.POST['order']
+        print(f"[REST] GET order={order} FROM REST CLIENT, SENT TO gRPC SERVER...")
         with grpc.insecure_channel(host) as channel:
             stub = fib_pb2_grpc.FibCalculatorStub(channel)
 
@@ -44,6 +45,7 @@ class FibView(APIView):
         mqtt_client = mqtt.Client()
         mqtt_client.connect(host=config['IP'], port=int(config['MQTT_PORT']))
         mqtt_client.loop_start()
+        print(f"[REST] SENT order={order} TO MQTT MESSAGE BROKER IN topic={config['HISTORY_TOPIC']}")
         mqtt_client.publish(topic=config['HISTORY_TOPIC'], payload=order)
         return Response(data={"value":grpc_response.value}, status=200)
 
@@ -51,6 +53,7 @@ class LogsView(APIView):
     permissions_classes = (permissions.AllowAny,)
 
     def get(self, request):
+        print(f"[REST] GET FROM REST CLIENT, SENT TO gRPC SERVER...")
         host = f"{config['IP']}:{config['GRPC_PORT']}"
         with grpc.insecure_channel(host) as channel:
             stub = log_pb2_grpc.LogsStub(channel)

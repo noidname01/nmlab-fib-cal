@@ -30,11 +30,12 @@ class FibCalculatorServicer(fib_pb2_grpc.FibCalculatorServicer):
 
     def Compute(self, request, context):
         n = request.order
+        
         value = self._fibonacci(n)
 
         response = fib_pb2.FibResponse()
         response.value = value
-
+        print(f"[gRPC] GET order={n} FROM REST SERVER, SENT BACK value={value} TO REST SERVER...")
         return response
 
     def _fibonacci(self, n):
@@ -63,12 +64,14 @@ class LogsServicer(log_pb2_grpc.LogsServicer):
     def Log(self, request, context):
         response = log_pb2.LogsResponse()
         response.history[:] = history_record
+        print(f"[gRPC] GET FROM REST CLIENT, SENT BACK history={history_record} TO REST SERVER...")
 
         return response
 
 
 def on_message(client, obj, msg):
     history_record.append(int(msg.payload.decode()))
+    print(f"[MQTT] GET NEW RECORD {int(msg.payload.decode())} FROM MESSAGE BROKER")
 
 def mqtt_subscribe():
     # Establish connection to mqtt broker
